@@ -1,0 +1,6 @@
+{
+  "name": "sqa-study-database",
+  "private": true,
+  "type": "module",
+  "description": "Schema, migrations and seed data. Scripts run with the backend's node_modules (see db.js)."
+}
