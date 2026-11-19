@@ -70,6 +70,12 @@ npm run build:phone --prefix frontend
 Send `frontend/dist-phone/sqa-study.html` to your phone (WhatsApp to yourself, Google Drive, USB) and open it in Chrome.
 Progress, bookmarks and your risk table are saved on the phone.
 
+## Put it online (Netlify)
+
+`netlify.toml` tells Netlify to build the offline version from `frontend/` (no backend needed).
+In Netlify: **Add new site → Import an existing project → GitHub → my-notes → branch `main` → Deploy**.
+Every push to `main` redeploys the site.
+
 ## Edit notes or add a subject
 
 Notes are in `database/seeds/data/`. Edit them, then run `npm run db:seed --prefix backend` to reload the database,

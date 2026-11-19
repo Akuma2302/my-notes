@@ -1,0 +1,22 @@
+# Netlify deploys the offline build of the frontend: all notes are built in,
+# so no backend or database server is needed. Progress, bookmarks and the
+# risk table are saved in each visitor's browser.
+
+[build]
+  base = "frontend"                 # Netlify runs npm install here automatically
+  command = "npm run build:phone"   # reads notes from ../database/seeds/data
+  publish = "dist-phone"            # relative to base
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# Always fetch the newest page so updates show up right after a deploy.
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/"
+  [headers.values]
+    Cache-Control = "no-cache"
