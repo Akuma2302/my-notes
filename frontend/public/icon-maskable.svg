@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <title>SE Master</title>
+  <rect width="512" height="512" fill="#121214"/>
+  <g transform="translate(256 256) scale(0.78) translate(-256 -250)">
+  
+  <!-- open book: two pages around a spine -->
+  <path d="M256 176 C214 146 158 136 100 142 V358 C158 352 214 362 256 392 Z" fill="#F4F3F8"/>
+  <path d="M256 176 C298 146 354 136 412 142 V358 C354 352 298 362 256 392 Z" fill="#CFCDE0"/>
+  <!-- code brackets on the pages: software engineering -->
+  <path d="M190 228 L146 270 L190 312" fill="none" stroke="#121214" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M322 228 L366 270 L322 312" fill="none" stroke="#121214" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- graduation cap above the book -->
+  <path d="M256 66 L354 106 L256 146 L158 106 Z" fill="#F4F3F8"/>
+  <path d="M206 128 V150 C234 166 278 166 306 150 V128" fill="none" stroke="#F4F3F8" stroke-width="14" stroke-linejoin="round"/>
+  <path d="M354 106 V146" stroke="#CFCDE0" stroke-width="10" stroke-linecap="round"/>
+  <circle cx="354" cy="152" r="9" fill="#CFCDE0"/>
+  <!-- sparkle -->
+  <path d="M432 300 l9 22 22 9 -22 9 -9 22 -9 -22 -22 -9 22 -9 z" fill="#CFCDE0"/>
+</g>
+</svg>

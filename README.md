@@ -2,15 +2,16 @@
 
 A full-stack study app with one tab per subject, then chapters inside each subject.
 
-| Subject | Status |
-|---|---|
-| Software Reliability and Quality Assurance (CSE6314) | 10 chapters from your lecture PDFs |
-| Database and Cloud Security | Coming soon |
-| Organisational Behaviour | Coming soon |
-| Programming Language Translation | Coming soon |
+| Subject | Chapters | Tutorials | Source |
+|---|---|---|---|
+| Software Reliability and Quality Assurance (CSE6314) | 10 | – | Lecture PDFs |
+| Organisational Behaviour | 13 | 13 (214 questions with model answers) | Topic slides + tutorial sheets |
+| Programming Language Translation (TCS3311 Compiler Design) | 12 | 12 (74 questions, worked solutions) | Tutorial sheets; notes from standard compiler material (lecture slides not received) |
+| Database and Cloud Security | 1 | – | Lecture 1 slides |
 
-The Software QA subject has 50 diagrams, 36 mind maps, 39 company cases, 41 code examples, 80 flashcards, 45 quiz questions,
-links between lectures, and 19 "beyond the lecture" industry topics under every chapter.
+Every chapter has notes with diagrams, mind maps, links to related lectures (also across subjects), company cases,
+code where useful, "beyond the lecture" SE topics, flashcards and a quiz. Chapters with a tutorial sheet get a
+**Tutorial** tab with each question, its marks and a model answer.
 
 ## Folder structure
 

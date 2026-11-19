@@ -17,7 +17,13 @@ export const toChapter = (row, parts) => ({
   code: parts.code.map(k => ({ title: k.title, lang: k.lang, explain: k.explain, src: k.source })),
   cards: parts.cards.map(k => [k.question, k.answer]),
   quiz: parts.quiz.map(q => ({ q: q.question, o: parseJson(q.options), a: q.answer_index, why: q.explanation })),
-  beyond: parts.skills.map(s => ({ skill: s.skill_id, why: s.why }))
+  beyond: parts.skills.map(s => ({ skill: s.skill_id, why: s.why })),
+  ...(parts.tutorial ? { tutorial: toTutorial(parts.tutorial, parts.tutorialQs) } : {})
+});
+
+const toTutorial = (t, qs) => ({
+  no: t.number, title: t.title, ...(t.source ? { source: t.source } : {}), ...(t.intro ? { intro: t.intro } : {}),
+  items: qs.map(x => ({ n: x.label, ...(x.kind !== 'question' ? { kind: x.kind } : {}), q: x.question, ...(x.marks != null ? { m: x.marks } : {}), a: x.answer }))
 });
 
 export const toCluster = row => ({ subject: row.subject_id, t: row.title, c: row.color, chs: parseJson(row.chapters), why: row.why });

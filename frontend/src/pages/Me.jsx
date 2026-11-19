@@ -7,7 +7,7 @@ import Art from '../components/Art.jsx';
 import ProgressRing from '../components/ProgressRing.jsx';
 import { useContent } from '../hooks/useContent.js';
 import { chapterProgress, resetProgress, selectProgress, setName } from '../redux/progressSlice.js';
-import { CHAPTER_TABS } from '../utils/constants.js';
+import { tabCount } from '../utils/constants.js';
 import { useChapterTheme } from '../hooks/useSubject.js';
 import { initials } from '../utils/maps.js';
 import { booksIllustration } from '../utils/illustrations.js';
@@ -32,7 +32,7 @@ export default function Me() {
   const { name, visited, saved, best } = useSelector(selectProgress);
   const dispatch = useDispatch();
   const [editing, setEditing] = useState(false);
-  const total = c => CHAPTER_TABS.length + (c.tool ? 1 : 0);
+  const total = c => tabCount(c);
   const rows = chapters.map(c => ({ c, done: chapterProgress(visited, c, total(c)), total: total(c), best: best['q-' + c.id] }));
   const inProgress = rows.filter(r => r.done > 0 && r.done < r.total);
   const finished = rows.filter(r => r.done >= r.total);

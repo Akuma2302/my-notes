@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <title>SE Master</title>
+  <rect width="64" height="64" rx="14" fill="#121214"/>
+  <path d="M32 17 C26 12 17 11 9 12 V48 C17 47 26 48 32 53 Z" fill="#F4F3F8"/>
+  <path d="M32 17 C38 12 47 11 55 12 V48 C47 47 38 48 32 53 Z" fill="#CFCDE0"/>
+  <path d="M23 25 L16 32 L23 39" fill="none" stroke="#121214" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M41 25 L48 32 L41 39" fill="none" stroke="#121214" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

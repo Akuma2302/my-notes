@@ -14,6 +14,7 @@ export function searchLocally({ chapters, skills, subjectById = {} }, query) {
     }
     c.cases.forEach(k => { if ((k.co + k.title + k.story).toLowerCase().includes(t)) res.push({ title: `${k.co}: ${k.title}`, label: L('real life'), go: `/c/${c.id}/cases` }); });
     c.cards.forEach(([q, a]) => { if ((q + a).toLowerCase().includes(t)) res.push({ title: q, label: L('flashcard'), go: `/c/${c.id}/cards` }); });
+    (c.tutorial?.items || []).forEach(x => { if ((x.q + stripHtml(x.a)).toLowerCase().includes(t)) res.push({ title: `${x.n} ${x.q.slice(0, 90)}`, label: L('tutorial'), go: `/c/${c.id}/tutorial` }); });
     c.code.forEach(k => { if ((k.title + k.explain).toLowerCase().includes(t)) res.push({ title: k.title, label: L('code'), go: `/c/${c.id}/code` }); });
   }
   skills.forEach(s => { if ((s.title + s.what + s.learn.join(' ')).toLowerCase().includes(t)) res.push({ title: s.title, label: 'SE essentials', go: `/skill/${s.id}` }); });

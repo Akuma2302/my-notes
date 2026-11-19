@@ -32,7 +32,9 @@ A full chapter looks like this:
   "code":   [{ "title": "...", "lang": "Python", "explain": "...", "src": "..." }],
   "cards":  [["question", "answer"]],
   "quiz":   [{ "q": "...", "o": ["a", "b", "c", "d"], "a": 1, "why": "..." }],
-  "beyond": [{ "skill": "oop", "why": "..." }]
+  "beyond": [{ "skill": "oop", "why": "..." }],
+  "tutorial": { "no": 6, "title": "Tutorial 6", "source": "Tutorial-06-t31213.doc",
+                "items": [{ "n": "D4", "q": "...", "m": 4, "a": "<p>model answer</p>", "kind": "practical" }] }
 }
 ```
 
@@ -48,7 +50,7 @@ A full chapter looks like this:
 
 | Method | Path | Description |
 |---|---|---|
-| GET | `/search?q=fault` | Notes, cases, cards, code and SE topics. `q` must be 2–100 characters. `meta.total` is the full count; up to 60 results are returned |
+| GET | `/search?q=fault` | Notes, cases, cards, code, tutorial questions and SE topics. `q` must be 2–100 characters. `meta.total` is the full count; up to 60 results are returned |
 
 Each result: `{ type, title, label, go, snippet?, chapterId? }`. `go` is the app route to open.
 

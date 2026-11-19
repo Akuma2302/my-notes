@@ -12,6 +12,8 @@ const q = {
                      WHERE f.question LIKE @t ${E} OR f.answer LIKE @t ${E} ORDER BY c.num`),
   code: db.prepare(`SELECT k.title, c.id, c.num, s.short AS subject FROM code_examples k JOIN chapters c ON c.id = k.chapter_id JOIN subjects s ON s.id = c.subject_id
                     WHERE k.title LIKE @t ${E} OR k.explain LIKE @t ${E} ORDER BY c.num`),
+  tutorials: db.prepare(`SELECT t.label, t.question, c.id, c.num, s.short AS subject FROM tutorial_questions t JOIN chapters c ON c.id = t.chapter_id JOIN subjects s ON s.id = c.subject_id
+                         WHERE t.question LIKE @t ${E} OR t.answer LIKE @t ${E} ORDER BY s.position, c.num, t.position`),
   skills: db.prepare(`SELECT id, title FROM skills WHERE title LIKE @t ${E} OR what LIKE @t ${E} OR learn LIKE @t ${E} ORDER BY position`)
 };
 
@@ -20,5 +22,6 @@ export const searchRepository = {
   cases: t => q.cases.all({ t: like(t) }),
   cards: t => q.cards.all({ t: like(t) }),
   code: t => q.code.all({ t: like(t) }),
+  tutorials: t => q.tutorials.all({ t: like(t) }),
   skills: t => q.skills.all({ t: like(t) })
 };

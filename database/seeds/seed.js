@@ -2,18 +2,24 @@
 // Safe to run again: it clears the content tables first. The risks table
 // (the student's own data) is left alone.
 import { openDb } from '../db.js';
-import chapters1 from './data/chapters-1-5.js';
-import chapters2 from './data/chapters-6-10.js';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { skills, skillGroups } from './data/skills.js';
 import { clusters } from './data/clusters.js';
 import { subjects } from './data/subjects.js';
 
-const chapters = [...chapters1, ...chapters2].sort((a, b) => a.num - b.num);
+// Every data/chapters-*.js file is loaded, so adding a subject is just adding a file.
+const dataDir = path.join(path.dirname(fileURLToPath(import.meta.url)), 'data');
+const files = fs.readdirSync(dataDir).filter(f => /^chapters-.*\.js$/.test(f)).sort();
+const chapters = (await Promise.all(files.map(f => import(pathToFileURL(path.join(dataDir, f)).href))))
+  .flatMap(m => m.default)
+  .sort((a, b) => a.subject.localeCompare(b.subject) || a.num - b.num);
 const db = openDb();
 const J = v => JSON.stringify(v);
 
 const seed = db.transaction(() => {
-  for (const t of ['theme_clusters', 'chapter_skills', 'quiz_questions', 'flashcards', 'code_examples', 'cases', 'chapter_links', 'chapters', 'subjects', 'skills', 'skill_groups']) {
+  for (const t of ['tutorial_questions', 'tutorials', 'theme_clusters', 'chapter_skills', 'quiz_questions', 'flashcards', 'code_examples', 'cases', 'chapter_links', 'chapters', 'subjects', 'skills', 'skill_groups']) {
     db.prepare(`DELETE FROM ${t}`).run();
   }
 
@@ -38,6 +44,8 @@ const seed = db.transaction(() => {
   const insCode = db.prepare('INSERT INTO code_examples (chapter_id, title, lang, explain, source, position) VALUES (?, ?, ?, ?, ?, ?)');
   const insCard = db.prepare('INSERT INTO flashcards (chapter_id, question, answer, position) VALUES (?, ?, ?, ?)');
   const insQuiz = db.prepare('INSERT INTO quiz_questions (chapter_id, question, options, answer_index, explanation, position) VALUES (?, ?, ?, ?, ?, ?)');
+  const insTut = db.prepare('INSERT INTO tutorials (chapter_id, number, title, source, intro) VALUES (?, ?, ?, ?, ?)');
+  const insTutQ = db.prepare('INSERT INTO tutorial_questions (chapter_id, label, kind, question, marks, answer, position) VALUES (?, ?, ?, ?, ?, ?, ?)');
   const insChSkill = db.prepare('INSERT INTO chapter_skills (chapter_id, skill_id, why, position) VALUES (?, ?, ?, ?)');
 
   for (const c of chapters) {
@@ -53,10 +61,15 @@ const seed = db.transaction(() => {
     c.cards.forEach(([q, a], i) => insCard.run(c.id, q, a, i));
     c.quiz.forEach((q, i) => insQuiz.run(c.id, q.q, J(q.o), q.a, q.why, i));
     c.beyond.forEach((b, i) => insChSkill.run(c.id, b.skill, b.why, i));
+    if (c.tutorial) {
+      const t = c.tutorial;
+      insTut.run(c.id, t.no, t.title || `Tutorial ${t.no}`, t.source || '', t.intro || '');
+      t.items.forEach((x, i) => insTutQ.run(c.id, x.n, x.kind || 'question', x.q, x.m ?? null, x.a, i));
+    }
   }
 });
 
 seed();
 const count = t => db.prepare(`SELECT COUNT(*) FROM ${t}`).pluck().get();
-console.log('Seeded:', ['subjects', 'chapters', 'chapter_links', 'cases', 'code_examples', 'flashcards', 'quiz_questions', 'skills', 'chapter_skills', 'theme_clusters'].map(t => `${t}=${count(t)}`).join(', '));
+console.log('Seeded:', ['subjects', 'chapters', 'chapter_links', 'cases', 'code_examples', 'flashcards', 'quiz_questions', 'skills', 'chapter_skills', 'theme_clusters', 'tutorials', 'tutorial_questions'].map(t => `${t}=${count(t)}`).join(', '));
 db.close();

@@ -12,6 +12,12 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev", "--prefix", "backend"],
       "port": 5000
+    },
+    {
+      "name": "netlify-build",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8767", "--directory", "frontend/dist-phone"],
+      "port": 8767
     }
   ]
 }

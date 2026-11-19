@@ -407,7 +407,22 @@ const D = (() => {
     }
   };
 
-  return { flow, cycle, tree, compare, cards, bars, mindmap, special, svg, box, line, label, esc };
+  /* Pictures written as data in the notes, e.g.
+     { flow: ['Plan', 'Do'], dir: 'h', title: '...' }   { cycle: [...], center: '...' }
+     { cards: [{ t, s, c }], cols: 2 }                  { compare: { a: { title, items, color }, b: {...} } }
+     { tree: { root, kids: [{ label, kids: [] }] } }    { bars: [{ label, v, text }] } */
+  function fromSpec(sp) {
+    const o = { title: sp.title, color: sp.color, colors: sp.colors };
+    if (sp.flow) return flow(sp.flow, { ...o, dir: sp.dir });
+    if (sp.cycle) return cycle(sp.cycle, { ...o, center: sp.center });
+    if (sp.cards) return cards(sp.cards, { title: sp.title, cols: sp.cols || 2, h: sp.h });
+    if (sp.compare) return compare(sp.compare.a, sp.compare.b, { title: sp.title });
+    if (sp.tree) return tree(sp.tree.root, sp.tree.kids, { ...o, kidColors: sp.kidColors });
+    if (sp.bars) return bars(sp.bars, { title: sp.title, color: sp.color, unit: sp.unit, labelW: sp.labelW });
+    return '';
+  }
+
+  return { flow, cycle, tree, compare, cards, bars, mindmap, special, fromSpec, svg, box, line, label, esc };
 })();
 
 export default D;

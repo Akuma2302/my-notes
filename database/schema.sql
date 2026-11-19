@@ -137,6 +137,27 @@ CREATE TABLE theme_clusters (
   subject_id  TEXT NOT NULL DEFAULT 'sqa' REFERENCES subjects(id) ON DELETE CASCADE
 );
 
+-- Tutorial sheet per chapter, with questions and model answers.  (migration 004)
+CREATE TABLE tutorials (
+  chapter_id  TEXT PRIMARY KEY REFERENCES chapters(id) ON DELETE CASCADE,
+  number      INTEGER NOT NULL,
+  title       TEXT NOT NULL,
+  source      TEXT NOT NULL DEFAULT '',
+  intro       TEXT NOT NULL DEFAULT ''
+);
+
+CREATE TABLE tutorial_questions (
+  id          INTEGER PRIMARY KEY AUTOINCREMENT,
+  chapter_id  TEXT NOT NULL REFERENCES tutorials(chapter_id) ON DELETE CASCADE,
+  label       TEXT NOT NULL,                  -- "Q1(a)"
+  kind        TEXT NOT NULL DEFAULT 'question' CHECK (kind IN ('question', 'practical', 'assignment')),
+  question    TEXT NOT NULL,
+  marks       INTEGER,
+  answer      TEXT NOT NULL,                  -- HTML model answer
+  position    INTEGER NOT NULL
+);
+
+CREATE INDEX idx_tutq_chapter ON tutorial_questions(chapter_id, position);
 CREATE INDEX idx_chapters_subject ON chapters(subject_id, num);
 CREATE INDEX idx_links_from    ON chapter_links(from_id);
 CREATE INDEX idx_links_to      ON chapter_links(to_id);

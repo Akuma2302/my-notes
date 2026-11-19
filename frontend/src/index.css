@@ -166,21 +166,30 @@ a{color:var(--text)}
 .toc .row .grow b::before{content:counter(toc, decimal-leading-zero) "  ";color:var(--muted);font-weight:700}
 
 /* ===== Welcome screen ===== */
-.welcome{max-width:520px;margin:0 auto;min-height:100vh;padding:18px 16px 24px;display:flex;flex-direction:column}
-.welcome .topline{display:flex;align-items:center;gap:10px}
-.welcome .brand{background:var(--ink);color:var(--on-ink);border-radius:999px;padding:11px 18px;font-weight:700;font-size:13.5px}
-.welcome .art{flex:1;display:grid;place-items:center;padding:10px 0;color:var(--text)}
-.welcome .art svg{width:100%;max-width:340px;height:auto}
-.welcome .big{background:var(--ink);color:var(--on-ink);border-radius:var(--r-xl);padding:22px 20px 18px;position:relative}
-.welcome .big h1{font-size:44px;line-height:1;letter-spacing:-.04em}
-.welcome .big p{font-size:19px;color:var(--on-ink2);margin:6px 0 16px;font-weight:600}
-.welcome .big small{font-size:12px;color:var(--on-ink2)}
-.welcome .big .corner{position:absolute;right:18px;bottom:16px;width:28px;height:28px}
-.welcome label{display:block;font-size:13px;font-weight:700;margin:16px 4px 6px}
-.welcome input{width:100%;padding:14px 18px;border-radius:999px;border:0;background:var(--surface);color:var(--text);font:inherit;font-size:15px}
-.start{margin-top:12px;display:flex;align-items:center;justify-content:space-between;background:var(--surface2);border-radius:999px;padding:7px 18px 7px 7px;width:100%;font-weight:700;font-size:15.5px}
-.start .go{width:50px;height:50px;border-radius:50%;background:var(--ink);color:var(--on-ink);display:grid;place-items:center}
+/* Fits one screen on any phone: height = visible viewport, sizes scale with screen height (vh) and width (vw). */
+.welcome{max-width:520px;margin:0 auto;height:100vh;height:100dvh;overflow:hidden;display:flex;flex-direction:column;
+  padding:max(clamp(10px,2.2vh,20px),env(safe-area-inset-top)) clamp(12px,4vw,16px) max(clamp(10px,2.4vh,22px),env(safe-area-inset-bottom));
+  gap:clamp(6px,1.4vh,12px)}
+.welcome .topline{display:flex;align-items:center;gap:10px;flex:none}
+.welcome .logo-mark{width:clamp(36px,5.6vh,46px);height:clamp(36px,5.6vh,46px);border-radius:28%;display:block}
+.welcome .brand{background:var(--ink);color:var(--on-ink);border-radius:999px;padding:clamp(7px,1.3vh,11px) 18px;font-weight:700;font-size:13.5px}
+.welcome .art{flex:1 1 auto;min-height:0;display:flex;align-items:center;justify-content:center;color:var(--text)}
+.welcome .art svg{width:auto;height:100%;max-width:100%;max-height:340px}
+.welcome .big{flex:none;background:var(--ink);color:var(--on-ink);border-radius:var(--r-xl);padding:clamp(14px,2.6vh,22px) 20px clamp(12px,2.2vh,18px);position:relative}
+.welcome .big h1{font-size:clamp(30px,min(11vw,5.6vh),46px);line-height:1;letter-spacing:-.04em}
+.welcome .big p{font-size:clamp(15px,min(4.8vw,2.4vh),19px);color:var(--on-ink2);margin:clamp(3px,.8vh,6px) 0 clamp(8px,1.8vh,16px);font-weight:600}
+.welcome .big small{font-size:12px;color:var(--on-ink2);display:block;padding-right:34px}
+.welcome .big .corner{position:absolute;right:18px;bottom:clamp(12px,2vh,16px);width:26px;height:26px}
+.welcome .who{flex:none}
+.welcome label{display:block;font-size:13px;font-weight:700;margin:0 4px clamp(4px,.8vh,6px)}
+.welcome .hi{font-size:clamp(17px,2.6vh,21px);font-weight:800;margin:0 4px 2px;letter-spacing:-.01em}
+.welcome input{width:100%;padding:clamp(10px,1.7vh,14px) 18px;border-radius:999px;border:0;background:var(--surface);color:var(--text);font:inherit;font-size:16px}
+.start{flex:none;display:flex;align-items:center;justify-content:space-between;background:var(--surface2);border-radius:999px;padding:6px 18px 6px 6px;width:100%;font-weight:700;font-size:15.5px}
+.start .go{width:clamp(40px,6vh,50px);height:clamp(40px,6vh,50px);border-radius:50%;background:var(--ink);color:var(--on-ink);display:grid;place-items:center}
 .start .chev{letter-spacing:-4px;font-weight:800;color:var(--muted)}
+/* very short screens (small phones, landscape): drop the extra line and shrink the art further */
+@media (max-height:600px){.welcome .big small{display:none}.welcome .big p{margin-bottom:4px}}
+@media (max-height:440px){.welcome .art{display:none}}
 
 /* ===== Profile ===== */
 .profile-head{background:var(--ink);color:var(--on-ink);margin:0 -16px;padding:22px 16px 26px;border-radius:0 0 34px 34px;text-align:center}
@@ -306,3 +315,20 @@ svg text{font-family:inherit}
 .subject-hero small{color:var(--on-ink2);font-size:12px}
 .subject-hero h2{margin:6px 0 4px;font-size:22px;max-width:85%}
 .subject-hero .bar{max-width:70%}
+
+/* ===== Tutorial ===== */
+.tut-head b{font-size:17px;display:block}
+.tut-head small{color:var(--muted);font-size:12.5px}
+.tut-intro{font-size:14px;margin-top:8px}
+.tut-q{background:var(--surface);border-radius:var(--r-lg);padding:14px 16px;margin:10px 0}
+.tut-top{display:flex;gap:8px;align-items:center}
+.tut-n{background:var(--ink);color:var(--on-ink);border-radius:999px;padding:3px 11px;font-size:12px;font-weight:800}
+.tut-m{background:var(--surface2);border-radius:999px;padding:3px 10px;font-size:11.5px;font-weight:700;color:var(--text2)}
+.tut-text{font-weight:600;margin:10px 0 8px}
+.tut-toggle{font-size:13px;font-weight:800;text-decoration:underline}
+.tut-a{margin-top:10px;padding:12px 14px;border-radius:var(--r-md);background:var(--surface2);font-size:14px}
+.tut-a ul,.tut-a ol{padding-left:20px}
+.tut-a table{border-collapse:collapse;font-size:12.5px;margin:6px 0;width:100%}
+.tut-a th,.tut-a td{border:1px solid var(--line2);padding:4px 6px;text-align:left}
+.tut-a pre{font-size:12px}
+.tut-a .tablewrap{overflow-x:auto}

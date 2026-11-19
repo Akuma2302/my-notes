@@ -3,6 +3,13 @@ export const CHAPTER_TABS = [
   ['beyond', 'Beyond lecture'], ['cards', 'Cards'], ['quiz', 'Quiz']
 ];
 
+// Tabs a chapter shows: the shared ones, plus Tutorial and Calculator when it has them.
+export const chapterTabs = c => {
+  const t = c.tutorial ? [...CHAPTER_TABS.slice(0, 6), ['tutorial', 'Tutorial'], ...CHAPTER_TABS.slice(6)] : CHAPTER_TABS;
+  return c.tool ? [...t, ['tools', 'Calculator']] : t;
+};
+export const tabCount = c => chapterTabs(c).length;
+
 export const CASE_THEME = { r: 'control', c: 'control', p: 'quality', t: 'reliability', a: 'skill', g: 'reliability', x: 'skill' };
 
 export const FP_WEIGHTS = [

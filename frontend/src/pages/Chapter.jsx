@@ -19,7 +19,8 @@ import { useContent } from '../hooks/useContent.js';
 import { goBack, replaceRoute } from '../hooks/useHashRoute.js';
 import { markRead, selectSaved, toggleSaved, visitTab } from '../redux/progressSlice.js';
 import { themeIllustration } from '../utils/illustrations.js';
-import { CHAPTER_TABS } from '../utils/constants.js';
+import { chapterTabs } from '../utils/constants.js';
+import TutorialTab from '../features/tutorial/TutorialTab.jsx';
 
 export default function Chapter({ id, tab = 'note' }) {
   const { chapterById, skillById, subjectById } = useContent();
@@ -31,7 +32,7 @@ export default function Chapter({ id, tab = 'note' }) {
   const quiz = useMemo(() => (c ? c.quiz.map(q => ({ ...q, chapter: c })) : []), [c]);
   if (!c) return <NotFound />;
 
-  const tabs = c.tool ? [...CHAPTER_TABS, ['tools', 'Calculator']] : CHAPTER_TABS;
+  const tabs = chapterTabs(c);
   const key = 'c:' + c.id;
   const pics = c.sections.reduce((n, x) => n + (x.pics || []).length, 0);
   return (
@@ -71,6 +72,7 @@ export default function Chapter({ id, tab = 'note' }) {
           <div className="card">Industry topics you should learn alongside this chapter, and why each one connects to it. Tap a topic to see what to learn, a company example and code.</div>
           {c.beyond.map(b => <SkillCard key={b.skill} skill={skillById[b.skill]} why={b.why} chapter={c} />)}
         </>}
+        {tab === 'tutorial' && c.tutorial && <TutorialTab chapter={c} />}
         {tab === 'cards' && <Flashcards cards={cards} />}
         {tab === 'quiz' && <Quiz questions={quiz} scoreKey={'q-' + c.id} />}
         {tab === 'tools' && <ChapterTool tool={c.tool} />}

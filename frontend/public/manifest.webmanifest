@@ -1,9 +1,20 @@
 {
-  "name": "SQA Study Notes",
-  "short_name": "SQA Notes",
+  "name": "SE Master: Software Engineering Study Notes",
+  "short_name": "SE Master",
+  "description": "Lecture notes, mind maps, company cases, code, tutorials and quizzes for every subject.",
+  "id": "./",
   "start_url": "./",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#f6f5f1",
-  "theme_color": "#185FA5",
-  "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
+  "orientation": "portrait",
+  "background_color": "#E9E8F0",
+  "theme_color": "#121214",
+  "categories": ["education", "productivity"],
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
 }

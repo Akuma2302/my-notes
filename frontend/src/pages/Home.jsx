@@ -12,11 +12,11 @@ import { useContent } from '../hooks/useContent.js';
 import { useSubject } from '../hooks/useSubject.js';
 import { useTheme } from '../hooks/useTheme.js';
 import { chapterProgress, selectProgress, setFilter } from '../redux/progressSlice.js';
-import { CHAPTER_TABS } from '../utils/constants.js';
+import { tabCount } from '../utils/constants.js';
 import { initials } from '../utils/maps.js';
 import { studyIllustration } from '../utils/illustrations.js';
 
-const tabsOf = c => CHAPTER_TABS.length + (c.tool ? 1 : 0);
+const tabsOf = c => tabCount(c);
 
 export default function Home() {
   const { chapters: all, skills } = useContent();
@@ -50,7 +50,7 @@ export default function Home() {
         <>
           <Link to={`/s/${subject.id}`} className="subject-hero" aria-label={`Open ${subject.title}`}>
             <Art svg={studyIllustration()} />
-            <small>{subject.code} · {chapters.length} chapters</small>
+            <small>{subject.code ? `${subject.code} · ` : ""}{chapters.length} chapters</small>
             <h2>{subject.title}</h2>
             <div className="bar"><i style={{ width: pct(chapters) + '%' }} /></div>
             <small>{pct(chapters)}% done</small>

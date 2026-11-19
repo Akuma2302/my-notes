@@ -1,8 +1,6 @@
-// Subjects shown as tabs on Home. To add notes for a subject later:
-//   1. set its status to 'active' (and fill in its code),
-//   2. add a chapters file (e.g. chapters-dcs.js) whose chapters have subject: '<id>'
-//      and ids like 'dcs1', 'dcs2'…,
-//   3. import that file in seeds/seed.js and frontend/src/services/staticContent.js.
+// Subjects shown as tabs on Home. Chapters live in data/chapters-*.js (loaded automatically)
+// with subject: '<id>' and ids like 'ob1', 'plt1', 'dcs1'. A subject with no notes yet uses
+// status: 'coming_soon'.
 export const subjects = [
   {
     id: 'sqa', code: 'CSE6314', status: 'active',
@@ -11,21 +9,21 @@ export const subjects = [
     themes: { quality: 'Quality ideas', reliability: 'Reliability', control: 'Control and measurement' }
   },
   {
-    id: 'dcs', code: '', status: 'coming_soon',
-    title: 'Database and Cloud Security', short: 'DB & Cloud Security',
-    description: 'Notes coming soon. Add your lecture PDFs to build this subject.',
-    themes: {}
-  },
-  {
-    id: 'ob', code: '', status: 'coming_soon',
+    id: 'ob', code: '', status: 'active',
     title: 'Organisational Behaviour', short: 'Org Behaviour',
-    description: 'Notes coming soon. Add your lecture PDFs to build this subject.',
-    themes: {}
+    description: 'People at work: personality, perception, motivation, teams, power, conflict, leadership, culture and change. 13 topics with tutorials.',
+    themes: { individual: 'Individual behaviour', team: 'Teams and people', org: 'Leading the organisation' }
   },
   {
-    id: 'plt', code: '', status: 'coming_soon',
+    id: 'plt', code: 'TCS3311', status: 'active',
     title: 'Programming Language Translation', short: 'Prog Lang Translation',
-    description: 'Notes coming soon. Add your lecture PDFs to build this subject.',
-    themes: {}
+    description: 'Compiler design: scanning, parsing, translation, optimisation and code generation. 12 topics with tutorials.',
+    themes: { front: 'Front end: scan and parse', middle: 'Meaning and translation', back: 'Back end: optimise and generate' }
+  },
+  {
+    id: 'dcs', code: '', status: 'active',
+    title: 'Database and Cloud Security', short: 'DB & Cloud Security',
+    description: 'Securing SQL Server and cloud data: threat modelling, compliance and more. Lecture 1 so far.',
+    themes: { threats: 'Threats and compliance', access: 'Access control', protect: 'Data protection' }
   }
 ];

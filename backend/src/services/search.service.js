@@ -17,6 +17,7 @@ export const searchService = {
     searchRepository.cases(text).forEach(r => results.push({ type: 'case', title: `${r.company}: ${r.title}`, chapterId: r.id, label: `${r.subject} · Ch ${r.num} real life`, go: `/c/${r.id}/cases` }));
     searchRepository.cards(text).forEach(r => results.push({ type: 'card', title: r.question, chapterId: r.id, label: `${r.subject} · Ch ${r.num} flashcard`, go: `/c/${r.id}/cards` }));
     searchRepository.code(text).forEach(r => results.push({ type: 'code', title: r.title, chapterId: r.id, label: `${r.subject} · Ch ${r.num} code`, go: `/c/${r.id}/code` }));
+    searchRepository.tutorials(text).forEach(r => results.push({ type: 'tutorial', title: `${r.label} ${r.question.slice(0, 90)}`, chapterId: r.id, label: `${r.subject} · Ch ${r.num} tutorial`, go: `/c/${r.id}/tutorial` }));
     searchRepository.skills(text).forEach(r => results.push({ type: 'skill', title: r.title, label: 'SE essentials', go: `/skill/${r.id}` }));
     return { results: results.slice(0, MAX_RESULTS), total: results.length };
   }

@@ -4,12 +4,12 @@ import TopBar from '../components/TopBar.jsx';
 import SubjectCard from '../components/SubjectCard.jsx';
 import { useContent } from '../hooks/useContent.js';
 import { chapterProgress, selectVisited } from '../redux/progressSlice.js';
-import { CHAPTER_TABS } from '../utils/constants.js';
+import { tabCount } from '../utils/constants.js';
 
 export default function Subjects() {
   const { subjects, chaptersOf } = useContent();
   const visited = useSelector(selectVisited);
-  const tabs = c => CHAPTER_TABS.length + (c.tool ? 1 : 0);
+  const tabs = c => tabCount(c);
   return (
     <>
       <TopBar title="Subjects" sub={`${subjects.length} subjects · tap one to see its chapters`} back={false} />

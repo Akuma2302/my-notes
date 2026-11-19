@@ -7,7 +7,7 @@ import ComingSoon from '../components/ComingSoon.jsx';
 import NotFound from './NotFound.jsx';
 import { useContent } from '../hooks/useContent.js';
 import { chapterProgress, selectVisited, setSubject } from '../redux/progressSlice.js';
-import { CHAPTER_TABS } from '../utils/constants.js';
+import { tabCount } from '../utils/constants.js';
 import { themeStyle } from '../utils/themes.js';
 
 export default function Subject({ id }) {
@@ -18,7 +18,7 @@ export default function Subject({ id }) {
   useEffect(() => { if (s) dispatch(setSubject(s.id)); }, [s, dispatch]);   // practice pages follow this subject
   if (!s) return <NotFound />;
   const list = chaptersOf(s.id);
-  const tabs = c => CHAPTER_TABS.length + (c.tool ? 1 : 0);
+  const tabs = c => tabCount(c);
   return (
     <>
       <TopBar title={s.title} sub={s.status === 'active' ? `${s.code} · ${list.length} chapters` : 'Coming soon'} />

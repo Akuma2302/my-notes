@@ -31,19 +31,31 @@ npm run build:phone --prefix frontend
 Add a function to `D.special` in `frontend/src/utils/diagrams.js` (use the helpers `flow`, `cycle`, `tree`, `compare`,
 `cards`, `bars`), then add its name to a section's `pics`.
 
-## Add notes for a new subject
+## Add notes for a new subject or chapter
 
-The three upcoming subjects already exist in `database/seeds/data/subjects.js` with `status: 'coming_soon'`
-(`dcs` Database and Cloud Security, `ob` Organisational Behaviour, `plt` Programming Language Translation).
-To fill one in, for example Database and Cloud Security:
+1. In `database/seeds/data/subjects.js`, add the subject (or set an existing one to `status: 'active'`), with its
+   `code` and `themes`, e.g. `themes: { data: 'Data security', cloud: 'Cloud' }`.
+2. Create a file `database/seeds/data/chapters-<something>.js` that `export default`s an array of chapters with
+   `subject: '<id>'` and ids like `dcs2`. **Every `chapters-*.js` file is loaded automatically** by the seed script
+   and the phone build, so nothing else needs editing.
+3. Optional: add that subject's big themes to `clusters.js` with `subject: '<id>'`.
+4. Run `npm run db:seed --prefix backend`, then `npm run build:phone --prefix frontend`.
 
-1. In `subjects.js`, set `status: 'active'`, add the course `code`, and name its themes, e.g.
-   `themes: { data: 'Data security', cloud: 'Cloud', ops: 'Operations' }` (the first three get the three card styles).
-2. Create `database/seeds/data/chapters-dcs.js` in the same format as the SQA files, with
-   `subject: 'dcs'` and ids `dcs1`, `dcs2`, … (numbers start at 1 again, since they're unique per subject).
-3. Import it in `database/seeds/seed.js` and in `frontend/src/services/staticContent.js`, next to the SQA chapter files.
-4. Optional: add that subject's big themes to `clusters.js` with `subject: 'dcs'`.
-5. Run `npm run db:seed --prefix backend`, then `npm run build:phone --prefix frontend`.
+## Tutorials
 
-The subject's tab stops saying "soon", and all its chapters get the same tabs: note, mind map, links, real life,
-code, beyond lecture, cards and quiz. No code changes are needed.
+Add a `tutorial` object to a chapter:
+
+```js
+tutorial: { no: 3, source: 'TUTORIAL-(3).docx', intro: '<p>optional</p>', items: [
+  { n: 'Q1(a)', m: 3, q: 'Question text', a: '<p>Model answer (HTML)</p>' },
+  { n: 'P1', kind: 'practical', q: '...', a: '...' }          // kind: question | practical | assignment
+] }
+```
+
+The chapter then gets a **Tutorial** tab, and its questions appear in search.
+
+## Pictures in the data
+
+Besides the named pictures in `D.special`, a section's `pics` can hold a picture written as data:
+`{ flow: [...], dir: 'h' }`, `{ cycle: [...], center }`, `{ cards: [{ t, s, c }], cols }`,
+`{ compare: { a: { title, items }, b: {...} } }`, `{ tree: { root, kids } }`, `{ bars: [{ label, v }] }`.

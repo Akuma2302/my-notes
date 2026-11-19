@@ -5,8 +5,8 @@ Your lecture notes are stored in a SQLite file, `sqa_study.db`, in this folder. 
 | File | Purpose |
 |---|---|
 | `schema.sql` | The full current schema in one place, for reading |
-| `migrations/` | Numbered changes applied in order: `001_initial_schema`, `002_add_theme_clusters`, `003_add_subjects` |
-| `seeds/data/` | The notes content: subjects, SQA chapters 1-5 and 6-10, SE topics, cross-lecture themes |
+| `migrations/` | Numbered changes applied in order: `001_initial_schema`, `002_add_theme_clusters`, `003_add_subjects`, `004_add_tutorials` |
+| `seeds/data/` | The notes: `subjects.js`, every `chapters-*.js` file (loaded automatically: SQA, OB, PLT, DCS), SE topics, cross-lecture themes |
 | `seeds/seed.js` | Loads `seeds/data` into the tables (clears content first; keeps your risks) |
 | `migrate.js` | Applies new migrations; `--reset` deletes the database first |
 | `db.js` | Opens the database using `better-sqlite3` from `../backend/node_modules` |
@@ -38,6 +38,7 @@ npm run db:reset
 | `skill_groups`, `skills` | SE essentials topics |
 | `chapter_skills` | Which SE topic sits under which chapter, and why |
 | `theme_clusters` | Big themes across lectures of one subject |
+| `tutorials`, `tutorial_questions` | Tutorial sheet per chapter: questions, marks, model answers |
 | `risks` | Your own risk table (Ch 10 calculator) |
 | `schema_migrations` | Which migrations have run |
 

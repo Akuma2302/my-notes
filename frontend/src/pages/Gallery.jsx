@@ -13,7 +13,7 @@ export default function Gallery() {
       {chapters.map(c => (
         <div key={c.id}>
           <h2>Ch {c.num}: {c.title}</h2>
-          {c.sections.flatMap(s => (s.pics || []).map(p => <Diagram key={p} name={p} caption={`${s.h} (Ch ${c.num})`} />))}
+          {c.sections.flatMap((s, si) => (s.pics || []).map((p, i) => <Diagram key={`${si}-${i}`} name={p} caption={`${s.h} (Ch ${c.num})`} />))}
         </div>
       ))}
     </>

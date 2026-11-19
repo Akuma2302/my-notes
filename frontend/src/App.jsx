@@ -1,7 +1,8 @@
 // Picks the page for the current #/route and wraps it in the layout.
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectProgress } from './redux/progressSlice.js';
+import { session } from './utils/storage.js';
 import AppLayout from './layout/AppLayout.jsx';
 import StatusScreen from './components/StatusScreen.jsx';
 import { useContent } from './hooks/useContent.js';
@@ -54,6 +55,9 @@ export default function App() {
   const content = useContent();
   const route = useHashRoute();
   const { onboarded } = useSelector(selectProgress);
+  // Welcome shows once per app launch: sessionStorage survives page changes and refresh, not closing the app.
+  const [welcomed, setWelcomed] = useState(() => session.get('welcomed', false));
+  const doneWelcome = () => { session.set('welcomed', true); setWelcomed(true); };
   const page = route.parts.slice(0, 2).join('/');
   useEffect(() => { window.scrollTo(0, 0); }, [page]);
 
@@ -66,7 +70,7 @@ export default function App() {
       </StatusScreen>
     );
   }
-  if (!onboarded) return <Welcome />;
+  if (!onboarded || !welcomed) return <Welcome onDone={doneWelcome} />;
   const { element, nav } = pick(route);
   return <AppLayout key={page} nav={nav}>{element}</AppLayout>;
 }

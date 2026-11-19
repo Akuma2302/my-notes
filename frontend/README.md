@@ -16,7 +16,8 @@ and Me (profile, in progress / finished, saved).
 |---|---|
 | `npm run dev` | Dev server on http://localhost:5173 (calls the backend through `/api`) |
 | `npm run build` | Web build in `dist/` (uses the backend API, caches for offline) |
-| `npm run build:phone` | One offline file `dist-phone/sqa-study.html` with the notes built in |
+| `npm run build:phone` | Offline build in `dist-phone/`: `index.html` (what Netlify serves, installable with icons) and `sqa-study.html` (single file for your phone, icons embedded) |
+| `npm run icons` | Regenerate PNG icons and `favicon.ico` from the SVGs in `public/` |
 | `npm run lint` | ESLint |
 
 The API address is `VITE_API_URL` in `.env` (default `/api`; Vite proxies it to `localhost:5000` in development).
@@ -25,7 +26,7 @@ The API address is `VITE_API_URL` in `.env` (default `/api`; Vite proxies it to 
 
 | Folder | Purpose |
 |---|---|
-| `public/` | Static files copied as-is: icon, web manifest, service worker |
+| `public/` | Static files: app icons (`icon.svg`, `icon-small.svg`, `icon-maskable.svg` + generated PNGs and `favicon.ico`), web manifest, service worker |
 | `src/assets/` | Logo and icon paths |
 | `src/components/` | Reusable UI: `Diagram`, `MindMap`, `CodeBlock`, `CaseCard`, `LinkBox`, `SkillCard`, `Tabs`, `TopBar`… |
 | `src/layout/` | `AppLayout` and the bottom navigation bar |

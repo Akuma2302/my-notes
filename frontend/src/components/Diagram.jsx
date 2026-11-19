@@ -4,7 +4,8 @@ import D from '../utils/diagrams.js';
 
 export default function Diagram({ name, caption, svg }) {
   const [big, setBig] = useState(false);
-  const markup = svg || (D.special[name] ? D.special[name]() : '');
+  // name is a built-in picture key, or a picture spec object written in the notes data
+  const markup = svg || (typeof name === 'object' ? D.fromSpec(name) : D.special[name] ? D.special[name]() : '');
   if (!markup) return null;
   const title = caption || (markup.match(/<title>(.*?)<\/title>/) || [])[1];
   return (

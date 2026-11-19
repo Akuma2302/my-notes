@@ -19,7 +19,7 @@ createRoot(document.getElementById('root')).render(
   </StrictMode>
 );
 
-// Offline support for the hosted web app (not needed in the single-file phone build).
-if ('serviceWorker' in navigator && import.meta.env.PROD && import.meta.env.VITE_STATIC !== 'true' && location.protocol.startsWith('http')) {
+// Offline support when the app is hosted (e.g. Netlify). Skipped when opened as a local file.
+if ('serviceWorker' in navigator && import.meta.env.PROD && location.protocol.startsWith('http')) {
   navigator.serviceWorker.register('./sw.js').catch(() => {});
 }

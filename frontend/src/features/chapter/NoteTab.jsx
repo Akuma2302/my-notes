@@ -23,7 +23,7 @@ export default function NoteTab({ chapter: c }) {
       {c.sections.map((s, n) => (
         <section key={s.h} id={`sec-${n}`} style={{ scrollMarginTop: 70 }}>
           <h2>{n + 1}. {s.h} <span className="src">Ch {c.num}</span></h2>
-          {(s.pics || []).map(p => <Diagram key={p} name={p} />)}
+          {(s.pics || []).map((p, i) => <Diagram key={i} name={p} />)}
           <div dangerouslySetInnerHTML={{ __html: s.body }} />
           {c.links.filter((_, j) => j % c.sections.length === n).map(l => (
             <LinkBox key={l.to + l.topic} from={c} to={chapterById[l.to]} topic={l.topic} text={l.text} />
