@@ -10,7 +10,8 @@ import { addNote, updateNote } from '../../redux/notesSlice.js';
 import { makeAnchor, topOf } from './anchor.js';
 import { useHashRoute } from '../../hooks/useHashRoute.js';
 
-const NOTE_WIDTH = 210;
+
+const DOT = 34;                 // notes sit on the page as dots until opened
 
 export default function NotesLayer() {
   const { path: page } = useHashRoute();
@@ -56,7 +57,7 @@ export default function NotesLayer() {
   const add = e => {
     const r = root();
     const w = r.clientWidth;
-    const clientX = r.getBoundingClientRect().left + Math.max(8, (w - Math.min(NOTE_WIDTH, w - 16)) / 2);
+    const clientX = r.getBoundingClientRect().left + (w - DOT) / 2;
     const clientY = Math.round(innerHeight * 0.3);
     const action = addNote({ page, anchor: makeAnchor(r, layerRef.current, clientX, clientY), x: (clientX - r.getBoundingClientRect().left) / w });
     dispatch(action);
@@ -64,16 +65,12 @@ export default function NotesLayer() {
     open(action.payload.id, { x: b.left + b.width / 2, y: b.top + b.height / 2 });
   };
 
-  const width = Math.min(NOTE_WIDTH, Math.max(160, layout.width - 16));
-  const leftOf = n => {
-    const noteW = n.open ? width : 34;
-    return Math.min(Math.max(n.x * layout.width, 4), Math.max(4, layout.width - noteW - 4));
-  };
+  const leftOf = n => Math.min(Math.max(n.x * layout.width, 4), Math.max(4, layout.width - DOT - 4));
 
   return (
     <div ref={layerRef} className="notes-layer">
       {layout.width > 0 && notes.map(n => (
-        <StickyNote key={n.id} note={n} top={layout.tops[n.id] ?? n.anchor.y} left={leftOf(n)} width={width}
+        <StickyNote key={n.id} note={n} top={layout.tops[n.id] ?? n.anchor.y} left={leftOf(n)} areaWidth={layout.width}
           onDrop={drop} onOpen={open} hidden={n.id === editing?.id} />
       ))}
       {createPortal(

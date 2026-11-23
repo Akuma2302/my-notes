@@ -1,26 +1,48 @@
-// One sticky note on the page: a small preview card, or a coloured dot. Drag either anywhere;
-// tap to open the full-screen editor. The "–" button shrinks the card to a dot.
+// One sticky note on the page. It rests as a small coloured dot; tap it and a preview card
+// pops out; tap the card (or ⤢) for the full-screen editor. "–" or tapping elsewhere turns the
+// preview back into the dot. Both the dot and the card can be dragged anywhere.
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { updateNote } from '../../redux/notesSlice.js';
 import { clean } from './richtext.js';
 import { showPhotos } from './images.js';
 import NoteIcon from './NoteIcon.jsx';
 
 const DRAG_THRESHOLD = 5;      // px moved before a press counts as a drag, not a tap
 const CLOSE_MS = 170;          // matches the shrink animation in index.css
+const CARD_W = 210;
 
-export default function StickyNote({ note, top, left, width, onDrop, onOpen, hidden }) {
-  const dispatch = useDispatch();
+export default function StickyNote({ note, top, left, areaWidth, onDrop, onOpen, hidden }) {
   const ref = useRef(null);
   const preview = useRef(null);
   const drag = useRef(null);
   const [pos, setPos] = useState(null);                          // live position while dragging
+  const [peek, setPeek] = useState(false);                       // preview card showing
   const [closing, setClosing] = useState(false);
   const html = useMemo(() => clean(note.html), [note.html]);
   const links = note.links || [];
+  const width = Math.min(CARD_W, areaWidth - 16);
 
-  useEffect(() => { showPhotos(preview.current); }, [html, note.open]);
+  useEffect(() => { if (peek) showPhotos(preview.current); }, [peek, html]);
+
+  const shrink = () => {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return setPeek(false);
+    setClosing(true);
+    setTimeout(() => { setClosing(false); setPeek(false); }, CLOSE_MS);
+  };
+
+  // tapping anywhere else closes the preview
+  useEffect(() => {
+    if (!peek) return;
+    const away = e => { if (!ref.current?.contains(e.target)) shrink(); };
+    document.addEventListener('pointerdown', away);
+    return () => document.removeEventListener('pointerdown', away);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [peek]);
+
+  const expand = () => {
+    const r = ref.current.getBoundingClientRect();
+    setPeek(false);
+    onOpen(note.id, { x: r.left + r.width / 2, y: r.top + r.height / 2 });
+  };
 
   const onPointerDown = e => {
     if (e.button !== 0 || e.target.closest('.note-btn')) return;
@@ -49,43 +71,42 @@ export default function StickyNote({ note, top, left, width, onDrop, onOpen, hid
     const d = drag.current;
     drag.current = null;
     if (!d) return;
+    if (!d.moved) return peek ? expand() : setPeek(true);        // a tap: dot -> preview -> full screen
     const r = ref.current.getBoundingClientRect();
-    if (!d.moved) return onOpen(note.id, { x: r.left + r.width / 2, y: r.top + r.height / 2 });   // a tap
     ref.current.style.visibility = 'hidden';       // so the drop point finds the page, not the note
     onDrop(note.id, r.left, r.top);
     ref.current.style.visibility = '';
     setPos(null);
   };
 
-  const shrink = () => {
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return dispatch(updateNote({ id: note.id, open: false }));
-    setClosing(true);
-    setTimeout(() => { setClosing(false); dispatch(updateNote({ id: note.id, open: false })); }, CLOSE_MS);
-  };
-
-  const style = { top: pos?.top ?? top, left: pos?.left ?? left, ...(note.open ? { width } : {}), ...(hidden ? { visibility: 'hidden' } : {}) };
   const handlers = { onPointerDown, onPointerMove, onPointerUp, onPointerCancel: () => { drag.current = null; setPos(null); } };
   const cls = `note note-${note.color}${pos ? ' dragging' : ''}`;
-  const summary = note.text ? note.text.slice(0, 60) : html.includes('<img') ? 'Photo note' : links.length ? `${links.length} link${links.length > 1 ? 's' : ''}` : 'Empty note';
+  const hasPhoto = html.includes('<img');
+  const summary = note.text ? note.text.slice(0, 60) : hasPhoto ? 'Photo note' : links.length ? `${links.length} link${links.length > 1 ? 's' : ''}` : 'Empty note';
+  const hide = hidden ? { visibility: 'hidden' } : {};
 
-  if (!note.open) {
+  if (!peek) {
+    const icon = !note.text && hasPhoto ? 'photo' : !note.text && links.length ? 'link' : 'lines';
     return (
-      <div ref={ref} className={`${cls} note-small`} style={style} {...handlers}>
-        <button className="note-dot" aria-label={`Open note: ${summary}`} title={note.text.slice(0, 80)}>
-          <NoteIcon name={note.text || !links.length ? 'lines' : 'link'} />
+      <div ref={ref} className={`${cls} note-small`} style={{ top: pos?.top ?? top, left: pos?.left ?? left, ...hide }} {...handlers}>
+        <button className="note-dot" aria-label={`Show note: ${summary}`} title={note.text.slice(0, 80)}
+          onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setPeek(true); } }}>
+          <NoteIcon name={icon} />
         </button>
       </div>
     );
   }
 
+  const cardLeft = Math.max(4, Math.min(left, areaWidth - width - 4));
   return (
-    <div ref={ref} className={`${cls} note-card${closing ? ' closing' : ''}`} style={style} {...handlers}
-      role="button" tabIndex={0} aria-label={`Open note: ${summary}`}
-      onKeyDown={e => { if (e.key === 'Enter' && e.target === e.currentTarget) onOpen(note.id); }}>
+    <div ref={ref} className={`${cls} note-card${closing ? ' closing' : ''}`}
+      style={{ top: pos?.top ?? top, left: pos?.left ?? cardLeft, width, ...hide }} {...handlers}
+      role="button" tabIndex={0} aria-label={`Open note full screen: ${summary}`}
+      onKeyDown={e => { if (e.key === 'Enter' && e.target === e.currentTarget) expand(); if (e.key === 'Escape') shrink(); }}>
       <div className="note-bar" title="Drag to move, tap to open">
         <span className="note-grip" aria-hidden="true">⋮⋮</span>
         {links.length > 0 && <span className="note-chip"><NoteIcon name="link" />{links.length}</span>}
-        <span className="note-open-hint" aria-hidden="true"><NoteIcon name="expand" /></span>
+        <button className="note-btn" onClick={expand} aria-label="Open full screen" title="Full screen"><NoteIcon name="expand" /></button>
         <button className="note-btn" onClick={shrink} aria-label="Shrink to a dot" title="Shrink"><NoteIcon name="minus" /></button>
       </div>
       {html
