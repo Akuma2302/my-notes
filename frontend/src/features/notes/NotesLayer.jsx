@@ -8,6 +8,7 @@ import StickyNote from './StickyNote.jsx';
 import NoteEditor from './NoteEditor.jsx';
 import { addNote, updateNote } from '../../redux/notesSlice.js';
 import { makeAnchor, topOf } from './anchor.js';
+import { clearFocus, pendingFocus } from './pageInfo.js';
 import { useHashRoute } from '../../hooks/useHashRoute.js';
 
 
@@ -22,6 +23,7 @@ export default function NotesLayer() {
   const [layout, setLayout] = useState({ width: 0, tops: {} });
   const [editing, setEditing] = useState(null);             // { id, origin } of the open editor
   const editingNote = editing && all.find(n => n.id === editing.id);
+  const [focus, setFocus] = useState(() => pendingFocus(page));   // note to jump to (from "My notes")
 
   const root = () => layerRef.current?.parentElement;     // the page (main#app)
 
@@ -44,6 +46,32 @@ export default function NotesLayer() {
     const t = setTimeout(measure, 350);                      // after the page fade-in settles
     return () => { ro.disconnect(); clearTimeout(t); };
   }, [measure]);
+
+  // after the page has settled, scroll the jumped-to note into the middle of the screen
+  useEffect(() => {
+    if (!focus) return;
+    clearFocus();
+    // some tabs (tutorials) load their content a moment later, so keep trying while the page grows
+    let tries = 0;
+    let t;
+    let aimed = null;                          // where the running smooth scroll is heading
+    let last = 0;                              // scroll position at the previous check
+    const tick = () => {
+      const r = root();
+      const n = notes.find(x => x.id === focus);
+      if (!r || !n) return setFocus(null);
+      const max = document.documentElement.scrollHeight - innerHeight;
+      const target = Math.max(0, Math.min(max, r.getBoundingClientRect().top + scrollY + topOf(r, n.anchor) - innerHeight * 0.35));
+      // only (re)start the scroll when the goal moved, so a smooth scroll is never cut short
+      if (aimed === null || Math.abs(aimed - target) > 30) { aimed = target; last = scrollY; window.scrollTo({ top: target, behavior: 'smooth' }); }
+      else if (Math.abs(scrollY - target) > 30 && Math.abs(scrollY - last) < 2) window.scrollTo({ top: target, behavior: 'auto' });   // smooth scroll stalled
+      last = scrollY;
+      if (++tries < 10 && Math.abs(scrollY - target) > 30) t = setTimeout(tick, 250);
+    };
+    t = setTimeout(tick, 380);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [focus]);
 
   const drop = (id, clientX, clientY) => {
     const r = root();
@@ -71,7 +99,8 @@ export default function NotesLayer() {
     <div ref={layerRef} className="notes-layer">
       {layout.width > 0 && notes.map(n => (
         <StickyNote key={n.id} note={n} top={layout.tops[n.id] ?? n.anchor.y} left={leftOf(n)} areaWidth={layout.width}
-          onDrop={drop} onOpen={open} hidden={n.id === editing?.id} />
+          onDrop={drop} onOpen={open} hidden={n.id === editing?.id}
+          focus={n.id === focus} onFocused={() => setFocus(null)} />
       ))}
       {createPortal(
         <button className="note-add" onClick={add} aria-label="Add a sticky note to this page">

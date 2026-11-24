@@ -10,7 +10,7 @@ const DRAG_THRESHOLD = 5;      // px moved before a press counts as a drag, not 
 const CLOSE_MS = 170;          // matches the shrink animation in index.css
 const CARD_W = 210;
 
-export default function StickyNote({ note, top, left, areaWidth, onDrop, onOpen, hidden }) {
+export default function StickyNote({ note, top, left, areaWidth, onDrop, onOpen, hidden, focus, onFocused }) {
   const ref = useRef(null);
   const preview = useRef(null);
   const drag = useRef(null);
@@ -22,6 +22,16 @@ export default function StickyNote({ note, top, left, areaWidth, onDrop, onOpen,
   const width = Math.min(CARD_W, areaWidth - 16);
 
   useEffect(() => { if (peek) showPhotos(preview.current); }, [peek, html]);
+
+  // arrived here from "My notes": pop the preview once the page has scrolled to it
+  const [flash, setFlash] = useState(false);
+  useEffect(() => {
+    if (!focus) return;
+    const t = setTimeout(() => { setPeek(true); setFlash(true); }, 750);
+    const u = setTimeout(() => { setFlash(false); onFocused?.(); }, 2400);
+    return () => { clearTimeout(t); clearTimeout(u); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [focus]);
 
   const shrink = () => {
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return setPeek(false);
@@ -80,7 +90,7 @@ export default function StickyNote({ note, top, left, areaWidth, onDrop, onOpen,
   };
 
   const handlers = { onPointerDown, onPointerMove, onPointerUp, onPointerCancel: () => { drag.current = null; setPos(null); } };
-  const cls = `note note-${note.color}${pos ? ' dragging' : ''}`;
+  const cls = `note note-${note.color}${pos ? ' dragging' : ''}${flash ? ' flash' : ''}`;
   const hasPhoto = html.includes('<img');
   const summary = note.text ? note.text.slice(0, 60) : hasPhoto ? 'Photo note' : links.length ? `${links.length} link${links.length > 1 ? 's' : ''}` : 'Empty note';
   const hide = hidden ? { visibility: 'hidden' } : {};

@@ -20,6 +20,7 @@ import Cards from './pages/Cards.jsx';
 import QuizPage from './pages/QuizPage.jsx';
 import Tools from './pages/Tools.jsx';
 import Me from './pages/Me.jsx';
+import Notes from './pages/Notes.jsx';
 import Welcome from './pages/Welcome.jsx';
 import Search from './pages/Search.jsx';
 import Skills from './pages/Skills.jsx';
@@ -42,6 +43,7 @@ function pick({ parts, params }) {
     case 'cards': return { element: <Cards />, nav: 'Practice' };
     case 'quiz': return { element: <QuizPage />, nav: 'Practice' };
     case 'tools': return { element: <Tools />, nav: 'Practice' };
+    case 'notes': return { element: <Notes />, nav: 'Notes' };
     case 'me':
     case 'saved': return { element: <Me />, nav: 'Me' };
     case 'search': return { element: <Search initial={params.get('q') || ''} />, nav: 'Home' };

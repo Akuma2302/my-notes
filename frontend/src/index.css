@@ -448,3 +448,25 @@ svg text{font-family:inherit}
 .note-count{position:absolute;top:-4px;right:-4px;min-width:20px;height:20px;border-radius:999px;background:#0E0F08;color:#D4FF3A;box-shadow:0 0 0 2px #D4FF3A;font-size:11px;font-weight:800;display:grid;place-items:center;padding:0 5px}
 @media (prefers-reduced-motion:reduce){.note,.note-small,.note-small::after,.ned,.ned-pop{animation:none}}
 @media print{.notes-layer,.note-add,.ned{display:none}}
+
+/* ===== My notes page ===== */
+.note.flash{animation:note-pop .34s cubic-bezier(.34,1.56,.64,1),note-flash 1.6s ease-out .3s}
+@keyframes note-flash{0%,100%{box-shadow:0 0 0 1.5px rgba(0,0,0,.85),0 0 22px -4px var(--neo)}30%{box-shadow:0 0 0 1.5px rgba(0,0,0,.85),0 0 0 9px color-mix(in srgb,var(--neo) 45%,transparent),0 0 40px 4px var(--neo)}}
+.nl-group{background:var(--surface);border-radius:var(--r-lg);padding:6px;margin:12px 0}
+.nl-head{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:8px 8px 10px}
+.nl-head .grow{flex:1;min-width:0}
+.nl-head b{display:block;font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nl-head small{display:block;color:var(--muted);font-size:12px}
+.nl-note{--neo-ink:#0E0F08;display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:var(--surface3);border-radius:var(--r-md);padding:11px 10px 11px 12px;margin-top:6px;box-shadow:inset 4px 0 0 var(--neo)}
+.nl-note .grow{flex:1;min-width:0}
+.nl-note b{display:block;font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nl-snip{display:block;color:var(--text2);font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
+.nl-meta{display:flex;gap:10px;align-items:center;color:var(--muted);font-size:11.5px;margin-top:3px}
+.nl-meta span{display:inline-flex;align-items:center;gap:3px}
+.nl-meta .nico{width:12px;height:12px}
+.nl-dot{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;flex:none;background:var(--neo);color:var(--neo-ink);box-shadow:0 0 0 1.5px rgba(0,0,0,.85),0 0 14px -3px var(--neo)}
+.nl-dot .nico{width:15px;height:15px;stroke-width:2.6}
+.nl-empty p{max-width:300px;margin:6px auto}
+.nl-big{--neo-ink:#0E0F08;width:72px;height:72px;border-radius:50%;display:grid;place-items:center;margin:10px auto 14px;background:var(--neo);color:var(--neo-ink);box-shadow:0 0 0 2px rgba(0,0,0,.85),0 0 34px -4px var(--neo)}
+.nl-big .nico{width:32px;height:32px}
+@media (prefers-reduced-motion:reduce){.note.flash{animation:none}}

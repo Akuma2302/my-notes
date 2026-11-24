@@ -1,7 +1,7 @@
 import Icon from '../components/Icon.jsx';
 import Link from '../components/Link.jsx';
 
-const ITEMS = [['home', 'Home', '/'], ['book', 'Subjects', '/subjects'], ['graph', 'Connect', '/connect'], ['cards', 'Practice', '/practice'], ['user', 'Me', '/me']];
+const ITEMS = [['home', 'Home', '/'], ['book', 'Subjects', '/subjects'], ['graph', 'Connect', '/connect'], ['cards', 'Practice', '/practice'], ['sticky', 'Notes', '/notes'], ['user', 'Me', '/me']];
 
 export default function BottomNav({ active }) {
   return (
