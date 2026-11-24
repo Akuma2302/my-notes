@@ -31,11 +31,19 @@ const notesSlice = createSlice({
       const n = state.find(x => x.id === id);
       if (n) Object.assign(n, changes, 'html' in changes || 'links' in changes ? { updated: Date.now() } : {});
     },
+    // restore from a backup file: new notes are added, a note already here keeps the newer copy
+    importNotes(state, { payload: list }) {
+      for (const n of list) {
+        const i = state.findIndex(x => x.id === n.id);
+        if (i < 0) state.push(n);
+        else if ((n.updated || 0) > (state[i].updated || 0)) state[i] = n;
+      }
+    },
     deleteNote(state, { payload: id }) {
       return state.filter(n => n.id !== id);
     }
   }
 });
 
-export const { addNote, updateNote, deleteNote } = notesSlice.actions;
+export const { addNote, updateNote, deleteNote, importNotes } = notesSlice.actions;
 export default notesSlice.reducer;

@@ -78,6 +78,19 @@ export function deletePhotos(ids) {
   });
 }
 
+export const photoBlob = id => run('readonly', s => s.get(id)).catch(() => null);
+
+// Keep an already-shrunk picture (e.g. from a restored backup). Returns its id, or null.
+export async function storePhoto(blob) {
+  try {
+    const id = `p${Date.now().toString(36)}${Math.random().toString(36).slice(2, 7)}`;
+    await run('readwrite', s => s.put(blob, id));
+    return id;
+  } catch {
+    return null;
+  }
+}
+
 // Fill in every <img data-img> inside an element with its stored photo.
 export function showPhotos(root) {
   root?.querySelectorAll('img[data-img]').forEach(async img => {

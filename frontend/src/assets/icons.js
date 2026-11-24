@@ -1,5 +1,8 @@
 // Outline icon paths (24x24 viewBox).
 export const ICONS = {
+    close: 'M6 6l12 12M18 6L6 18',
+    download: 'M12 4v11 M7 10l5 5 5-5 M5 20h14',
+    upload: 'M12 15V4 M7 9l5-5 5 5 M5 20h14',
     sticky: 'M5 4h14v10l-6 6H5z M13 20v-6h6 M8 8h8 M8 11.5h5',
     home: 'M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z', book: 'M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2zM4 21V5M8 7h7',
     graph: 'M6 6m-2 0a2 2 0 1 0 4 0a2 2 0 1 0-4 0M18 6m-2 0a2 2 0 1 0 4 0a2 2 0 1 0-4 0M12 18m-2 0a2 2 0 1 0 4 0a2 2 0 1 0-4 0M8 6h8M7 8l4 8M17 8l-4 8',
